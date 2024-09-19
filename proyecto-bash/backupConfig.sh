@@ -6,8 +6,6 @@
 # Example: ./backupConfig.sh list
 # Example: ./backupConfig.sh remove id
 
-# Example: ./backupConfig.sh /home/user/backupData /home/user/backup.tar.gz 0 now +10min
-
 backupRunnerScriptDir="/home/vm/Documentos/GitHub/Zaleos-bootcamp-linux/proyecto-bash/backupRunner.sh"
 
 function create()
@@ -45,7 +43,7 @@ function create()
 
     backupCMD="bash $backupRunnerScriptDir $backupDir $backupFile"
 
-    if [ "$isPeriodic" -eq 0 ]
+    if [ "$isPeriodic" = "n" ]
     then
         if [ $# -eq 3 ]
         then
