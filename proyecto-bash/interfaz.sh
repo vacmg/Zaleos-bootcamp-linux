@@ -83,12 +83,12 @@ Day (){
             if [[ $DAY =~ ^[0-9]{1,2}$ ]] && [ $DAY -gt 1 ] && [ $DAY -le 31 ]
             then
                 DAY_NUM=$(Concat "$DAY")
-                DAY_WEEK=\*
+                DAY_WEEK='*'
                 VALID=0
             elif [[ $DAY =~ ^(M|Tu|W|Th|F|Sa|Su)$ ]]
             then
                 DAY_WEEK=$(Asign "$DAY")
-                DAY_NUM=\*
+                DAY_NUM='*'
                 VALID=0
             else
                 echo "WRONG FORMAT!! Try again"
@@ -101,7 +101,7 @@ Day (){
             if [[ $DAY =~ ^[0-9]{1,2}$ ]] && [ $DAY -gt 1 ] && [ $DAY -le 31 ]
             then
                 DAY_NUM=$(Concat "$DAY")
-                DAY_WEEK=\*
+                DAY_WEEK='*'
                 VALID=0
             else
                echo "WRONG FORMAT!! Try again"
@@ -185,7 +185,7 @@ do
                 Day
                 Hour
                 Min
-                bash backupConfig.sh create $SOURCE $DESTI $PERIODICBACKUP $FORMATTED_MIN $FORMATTED_HOUR $DAY_NUM $FORMATTED_MONTH $DAY_WEEK
+                bash backupConfig.sh create $SOURCE $DESTI $PERIODICBACKUP $FORMATTED_MIN $FORMATTED_HOUR $DAY_NUM $FORMATTED_MONTH "$DAY_WEEK"
                 VALID=0
             elif [ $PERIODICBACKUP = "n" ]
             then
