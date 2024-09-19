@@ -64,36 +64,57 @@ else
     month=$7
     dayOfWeek=$8
 
-    if [ "$minute" -lt 0 ] || [ "$minute" -gt 59 ]
-    then
-        echo "Invalid minute value (${minute})" >&2
-        exit 1
+    if [ ! "$minute" = \* ]
+        then
+        if [ "$minute" -lt 0 ] || [ "$minute" -gt 59 ]
+        then
+            echo "Invalid minute value (${minute})" >&2
+            exit 1
+        fi
     fi
 
-    if [ "$hour" -lt 0 ] || [ "$hour" -gt 23 ]
-    then
-        echo "Invalid hour value (${hour})" >&2
-        exit 1
+    if [ ! "$hour" = \* ]
+        then
+        if [ "$hour" -lt 0 ] || [ "$hour" -gt 23 ]
+        then
+            echo "Invalid hour value (${hour})" >&2
+            exit 1
+        fi
     fi
 
-    if [ "$dayOfMonth" -lt 1 ] || [ "$dayOfMonth" -gt 31 ]
-    then
-        echo "Invalid dayOfMonth value (${dayOfMonth})" >&2
-        exit 1
+    if [ ! "$dayOfMonth" = \* ]
+        then
+        if [ "$dayOfMonth" -lt 1 ] || [ "$dayOfMonth" -gt 31 ]
+        then
+            echo "Invalid dayOfMonth value (${dayOfMonth})" >&2
+            exit 1
+        fi
     fi
 
-    if [ "$month" -lt 1 ] || [ "$month" -gt 12 ]
-    then
-        echo "Invalid month value (${month})" >&2
-        exit 1
+    if [ ! "$month" = \* ]
+        then
+        if [ "$month" -lt 1 ] || [ "$month" -gt 12 ]
+        then
+            echo "Invalid month value (${month})" >&2
+            exit 1
+        fi
     fi
 
-    if [ "$dayOfWeek" -lt 0 ] || [ "$dayOfWeek" -gt 7 ]
+    if [ ! "$dayOfWeek" = \* ]
     then
-        echo "Invalid dayOfWeek value (${dayOfWeek})" >&2
-        exit 1
+        if [ "$dayOfWeek" -lt 0 ] || [ "$dayOfWeek" -gt 7 ]
+        then
+            echo "Invalid dayOfWeek value (${dayOfWeek})" >&2
+            exit 1
+        fi
     fi
 
+    crontab -l 2> /dev/null || ( echo "# crontab of user $USER" | crontab -; echo "No crontab found for user $USER; Creating a new one..." )
+    ( crontab -l; echo "$minute $hour $dayOfMonth $month $dayOfWeek bash /home/vm/Documentos/GitHub/Zaleos-bootcamp-linux/proyecto-bash/backupRunner.sh $backupDir $backupFile" ) | sort -ru | crontab -
     echo "Backup will be run at min=$minute hour=$hour dayOfMonth=$dayOfMonth month=$month dayOfWeek=$dayOfWeek" >&2
-    # TODO run cron ( crontab -l; echo "@reboot sleep 10s" ) | crontab -
 fi
+
+# TODO ermove this debug commands
+watch cat "$backupFile"
+rm "$backupFile"
+crontab -r

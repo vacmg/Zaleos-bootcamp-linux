@@ -11,4 +11,5 @@ fi
 backupDir=$1
 backupFile=$2
 
-echo "date: $(date); Backup directory: $backupDir; Backup file: $backupFile" > "$backupFile"
+echo "date: $(date); Backup directory: $backupDir; Backup file: $backupFile" >> "$backupFile"
+sleep 50s
