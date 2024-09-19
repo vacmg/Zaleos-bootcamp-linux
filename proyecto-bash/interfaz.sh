@@ -83,12 +83,12 @@ Day (){
             if [[ $DAY =~ ^[0-9]{1,2}$ ]] && [ $DAY -gt 1 ] && [ $DAY -le 31 ]
             then
                 DAY_NUM=$(Concat "$DAY")
-                DAY_WEEK=*
+                DAY_WEEK=\*
                 VALID=0
             elif [[ $DAY =~ ^(M|Tu|W|Th|F|Sa|Su)$ ]]
             then
                 DAY_WEEK=$(Asign "$DAY")
-                DAY_NUM=*
+                DAY_NUM=\*
                 VALID=0
             else
                 echo "WRONG FORMAT!! Try again"
@@ -101,7 +101,7 @@ Day (){
             if [[ $DAY =~ ^[0-9]{1,2}$ ]] && [ $DAY -gt 1 ] && [ $DAY -le 31 ]
             then
                 DAY_NUM=$(Concat "$DAY")
-                DAY_WEEK=*
+                DAY_WEEK=\*
                 VALID=0
             else
                echo "WRONG FORMAT!! Try again"
@@ -170,11 +170,8 @@ do
         echo "Where do you have your files?"
         read SOURCE
         clear
-        echo "In which path do you want to save the compressed file?" 
+        echo "In which path do you want to save the compressed file? (with the name of the compressed file)" 
         read DESTI
-        clear
-        echo "How do you want to name the backup file?" 
-        read BACKUPNAME
         clear
 
         while [ $VALID -eq 1 ]
