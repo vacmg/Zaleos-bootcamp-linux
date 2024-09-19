@@ -10,6 +10,7 @@ backupRunnerScriptDir="/home/vm/Documentos/GitHub/Zaleos-bootcamp-linux/proyecto
 
 function create()
 {
+    echo "Create option running with the following arguments: $*"
     if [ $# -lt 3 ]
     then
         echo "To program a backup to be run according to a specific periodic schedule: ./backupConfig.sh create backupDir backupFile 1 minute hour dayOfMonth month dayOfWeek" >&2
@@ -118,6 +119,8 @@ function create()
         echo "Backup will be run at min=$minute hour=$hour dayOfMonth=$dayOfMonth month=$month dayOfWeek=$dayOfWeek" >&2
     fi
 }
+
+echo "The script is running with the following arguments: $*"
 
 if [ "$1" = "create" ]
 then
