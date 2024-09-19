@@ -203,6 +203,7 @@ do
                         Day
                         Hour
                         Min
+                        AT_FORMAT="$YEAR$FORMATTED_MONTH$DAY_NUM$FORMATTED_HOUR$FORMATTED_MIN.00"
                         VALID=0
                     elif [ $NOW != "y" ]
                     then
@@ -249,5 +250,6 @@ do
     DIA_SEM: $DAY_WEEK
     DIA_NUM: $DAY_NUM
     HORA: $FORMATTED_HOUR 
-    MIN: $FORMATTED_MIN"
+    MIN: $FORMATTED_MIN
+    AT_FORMAT: $AT_FORMAT"
 done
