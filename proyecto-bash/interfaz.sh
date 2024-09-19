@@ -188,6 +188,7 @@ do
                 Day
                 Hour
                 Min
+                bash backupConfig.sh create $SOURCE $DESTI $PERIODICBACKUP $FORMATTED_MIN $FORMATTED_HOUR $DAY_NUM $FORMATTED_MONTH $DAY_WEEK
                 VALID=0
             elif [ $PERIODICBACKUP = "n" ]
             then
@@ -204,6 +205,7 @@ do
                         Hour
                         Min
                         AT_FORMAT="$YEAR$FORMATTED_MONTH$DAY_NUM$FORMATTED_HOUR$FORMATTED_MIN.00"
+                        bash backupConfig.sh create $SOURCE $DESTI $PERIODICBACKUP $AT_FORMAT
                         VALID=0
                     elif [ $NOW != "y" ]
                     then
