@@ -55,7 +55,7 @@ function create()
         else
             timeArgs=${*:4} # get all arguments from the 4th argument
             echo "Backup will be run at $timeArgs" >&2
-            read # TODO run at
+            at "$timeArgs" <<< "$backupCMD"
         fi
 
     else
@@ -120,11 +120,6 @@ function create()
         ( crontab -l; echo "$minute $hour $dayOfMonth $month $dayOfWeek $backupCMD" ) | sort -ru | crontab -
         echo "Backup will be run at min=$minute hour=$hour dayOfMonth=$dayOfMonth month=$month dayOfWeek=$dayOfWeek" >&2
     fi
-
-    # TODO remove this debug commands
-    watch cat "$backupFile"
-    rm "$backupFile"
-    crontab -r
 }
 
 if [ "$1" = "create" ]
