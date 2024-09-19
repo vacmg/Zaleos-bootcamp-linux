@@ -1,0 +1,1 @@
+# ( crontab -l; echo "@reboo sleep 10s" ) | crontab -
