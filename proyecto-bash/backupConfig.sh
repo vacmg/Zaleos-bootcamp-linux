@@ -57,7 +57,6 @@ function create()
             echo "Backup will be run at $timeArgs" >&2
             at "$timeArgs" <<< "$backupCMD"
         fi
-
     else
         if [ $# -ne 8 ]
         then
