@@ -63,7 +63,11 @@ Month (){
         then
             FORMATTED_MONTH=$(Concat "$MONTH")
             VALID=0
-        else
+        elif [[ $PERIODICBACKUP = "y" ]] && [ "$MONTH" = '.' ]
+        then
+            FORMATTED_MONTH='*'
+            VALID=0
+        else 
             echo "INCORRECT MONTH!! try again"
         fi
     done
@@ -88,6 +92,11 @@ Day (){
             elif [[ $DAY =~ ^(M|Tu|W|Th|F|Sa|Su)$ ]]
             then
                 DAY_WEEK=$(Asign "$DAY")
+                DAY_NUM='*'
+                VALID=0
+            elif [[ $PERIODICBACKUP = "y" ]] && [ "$DAY" = '.' ]
+            then
+                DAY_WEEK='*'
                 DAY_NUM='*'
                 VALID=0
             else
@@ -123,7 +132,11 @@ Hour (){
         then
             FORMATTED_HOUR=$(Concat "$HOUR")
             VALID=0
-        else
+        elif [[ $PERIODICBACKUP = "y" ]] && [ "$HOUR" = '.' ]
+        then
+            FORMATTED_HOUR='*'
+            VALID=0
+        else 
             echo "WRONG FORMAT!! Try again"
         fi
     done
@@ -142,7 +155,11 @@ Min (){
         then
             FORMATTED_MIN=$(Concat "$MIN")
             VALID=0
-        else
+        elif [[ $PERIODICBACKUP = "y" ]] && [ "$MIN" = '.' ]
+        then
+            FORMATTED_MIN='*'
+            VALID=0
+        else 
             echo "WRONG FORMAT!! Try again"
         fi
     done
@@ -151,8 +168,8 @@ Min (){
 
 #Cuestionario:
 clear
-echo Greetings my friend!!
-sleep 0.5
+echo "Greetings my friend!!"
+sleep 1
 clear
 
 FLAG=1
@@ -181,11 +198,14 @@ do
             clear
             if [ $PERIODICBACKUP = "y" ]
             then
+                echo "If you want to set the backup every minute, hour, day or month write a ."
+                sleep 2.5
+                clear
                 Month
                 Day
                 Hour
                 Min
-                bash backupConfig.sh create $SOURCE $DESTI $PERIODICBACKUP $FORMATTED_MIN $FORMATTED_HOUR $DAY_NUM $FORMATTED_MONTH "$DAY_WEEK"
+                bash backupConfig.sh create $SOURCE $DESTI $PERIODICBACKUP "$FORMATTED_MIN" "$FORMATTED_HOUR" "$DAY_NUM" "$FORMATTED_MONTH" "$DAY_WEEK"
                 VALID=0
             elif [ $PERIODICBACKUP = "n" ]
             then
