@@ -4,7 +4,7 @@
 # Usage: ./backupConfig.sh create backupDir backupFile isPeriodic(0) timeArgs...
 # Usage: ./backupConfig.sh create backupDir backupFile isPeriodic(0)
 # Example: ./backupConfig.sh list
-# Example: ./backupConfig.sh remove id
+# Example: ./backupConfig.sh remove line_id
 
 backupRunnerScriptDir="/home/vm/Documentos/GitHub/Zaleos-bootcamp-linux/proyecto-bash/backupRunner.sh"
 
@@ -26,7 +26,7 @@ function create()
     #check if backupDir is a directory and has read permission
     if [ -d "$backupDir" ] && [ -r "$backupDir" ]
     then
-        echo "Backup directory $backupDir exists and is readable" >&2
+        echo "Backup directory $backupDir exists and is readable" > /dev/null # >&2
     else
         echo "Backup directory does not exist or is not readable" >&2
         exit 1
@@ -36,7 +36,7 @@ function create()
     backupFileDir=$(dirname "$backupFile")
     if [ -d "$backupFileDir" ] && [ -w "$backupFileDir" ]
     then
-        echo "Backup file directory $backupFileDir exists and is writable" >&2
+        echo "Backup file directory $backupFileDir exists and is writable" > /dev/null # >&2
     else
         echo "Backup file directory does not exist or is not writable" >&2
         exit 1
@@ -114,9 +114,42 @@ function create()
             fi
         fi
 
-        crontab -l 2> /dev/null || ( echo "# crontab of user $USER" | crontab -; echo "No crontab found for user $USER; Creating a new one..." )
+        crontab -l &> /dev/null || ( echo "# crontab of user $USER" | crontab -; echo "No crontab found for user $USER; Creating a new one..." )
         ( crontab -l; echo "$minute $hour $dayOfMonth $month $dayOfWeek $backupCMD" ) | sort -ru | crontab -
         echo "Backup will be run at min=$minute hour=$hour dayOfMonth=$dayOfMonth month=$month dayOfWeek=$dayOfWeek" >&2
+    fi
+}
+
+function list()
+{
+    echo "List option running with the following arguments: $*"
+    if [ $# -ne 0 ]
+    then
+        echo "Usage: ./backupConfig.sh list" >&2
+        exit 1
+    fi
+
+    crontab -l | grep $backupRunnerScriptDir | sed "s|bash $backupRunnerScriptDir||" | cat -n 2> /dev/null
+
+}
+
+function remove()
+{
+    echo "Remove option running with the following arguments: $*"
+    if [[ $# -ne 1 || ! $1 =~ ^[0-9]+$ ]]
+    then
+        echo "Usage: ./backupConfig.sh remove line_id" >&2
+        exit 1
+    fi
+
+    local pattern
+    pattern=$(crontab -l | grep $backupRunnerScriptDir | sed -n "$1 p" 2>/dev/null)
+
+    if [ -n "$pattern" ]
+    then
+        crontab -l | grep -v "$pattern" | sort -ru | crontab -
+    else
+        echo "No entry exists with this number ($1)" >&2
     fi
 }
 
@@ -125,6 +158,12 @@ echo "The script is running with the following arguments: $*"
 if [ "$1" = "create" ]
 then
     create "${@:2}"
+elif [ "$1" = "list" ]
+then
+    list "${@:2}"
+elif [ "$1" = "remove" ]
+then
+    remove "${@:2}"
 else
     echo "Invalid mode of operation (${1})" >&2
     echo "Usage: ./backupConfig.sh create/list/remove args" >&2
