@@ -120,11 +120,40 @@ function create()
     fi
 }
 
+function list()
+{
+    if [ $# -ne 0 ]
+    then
+        echo "Usage: ./backupConfig.sh list" >&2
+        exit 1
+    fi
+
+
+
+}
+
+function remove()
+{
+    if [ $# -ne -1 ] #TODO: change this to the correct number of arguments
+    then
+        echo "OPTION NOT IMPLEMENTED YET" >&2
+        echo "Usage: ./backupConfig.sh remove id" >&2
+        exit 1
+    fi
+
+}
+
 echo "The script is running with the following arguments: $*"
 
 if [ "$1" = "create" ]
 then
     create "${@:2}"
+elif [ "$1" = "list" ]
+then
+    list "${@:2}"
+elif [ "$1" = "remove" ]
+then
+    remove "${@:2}"
 else
     echo "Invalid mode of operation (${1})" >&2
     echo "Usage: ./backupConfig.sh create/list/remove args" >&2
