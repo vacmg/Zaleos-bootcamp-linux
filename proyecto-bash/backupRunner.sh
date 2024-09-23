@@ -5,11 +5,11 @@
 if [ $# -ne 2 ]
 then
     echo "Usage: ./backupRunner.sh backupDir backupFile" >&2
+    echo "Compress backupDir into backupFile.tar.xz" >&2
     exit 1
 fi
 
 backupDir=$1
 backupFile=$2
 
-echo "date: $(date); Backup directory: $backupDir; Backup file: $backupFile" >> "$backupFile"
-sleep 50s
+tar cJvf "${backupFile}.tar.xz" "$backupDir" &> "${backupFile}.log"
