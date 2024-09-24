@@ -12,4 +12,17 @@ fi
 backupDir=$1
 backupFile=$2
 
-tar cJvf "${backupFile}.tar.xz" "$backupDir" &> "${backupFile}.log"
+backupFileDir=$(dirname "$backupFile")
+if [ ! -d "$backupFileDir" ] || [ ! -w "$backupFileDir" ]
+then
+    echo "Backup file directory does not exist or is not writable" >&2
+    exit 1
+fi
+
+if [ ! -d "$backupDir" ] || [ ! -r "$backupDir" ]
+then
+    echo "Backup directory does not exist or is not readable" > "${backupFile}.log"
+    exit 1
+fi
+
+tar cJvf "${backupFile}.tar.xz" "$backupDir" &>> "${backupFile}.log"
