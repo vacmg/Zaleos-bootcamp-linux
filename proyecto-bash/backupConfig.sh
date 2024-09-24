@@ -149,6 +149,7 @@ function remove()
         crontab -l | grep -v "$pattern" | sort -ru | crontab -
     else
         echo "No entry exists with this number ($1)" >&2
+        exit 1
     fi
 }
 
