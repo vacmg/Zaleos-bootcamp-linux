@@ -129,8 +129,7 @@ function list()
         exit 1
     fi
 
-    crontab -l | grep $backupRunnerScriptDir | sed "s|bash $backupRunnerScriptDir||" | cat -n 2> /dev/null
-
+    crontab -l 2> /dev/null | grep $backupRunnerScriptDir | sed "s|bash $backupRunnerScriptDir||" | cat -n
 }
 
 function remove()
