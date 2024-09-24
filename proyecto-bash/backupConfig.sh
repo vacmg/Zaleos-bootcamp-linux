@@ -141,11 +141,11 @@ function remove()
     fi
 
     local pattern
-    pattern=$(crontab -l | grep $backupRunnerScriptDir | sed -n "$1 p" 2>/dev/null)
+    pattern=$(crontab -l | grep $backupRunnerScriptDir | sed -n "$1 p") 2>/dev/null
 
     if [ -n "$pattern" ]
     then
-        crontab -l | grep -v "$pattern" | sort -ru | crontab -
+        crontab -l | grep -Fv "$pattern" | crontab -
     else
         echo "No entry exists with this number ($1)" >&2
         exit 1
