@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+backupConfigScriptDir='backupConfig.sh'
+
 # Funciones auxiliares
 # Func que concatena un 0 delante del número si este tiene solo una cifra
 Concat (){
@@ -177,12 +179,18 @@ VALID=1
 
 while [ $FLAG -eq 1 ]
 do
-    echo "What do you want to do? [create, list, remove]"
+    echo "What do you want to do? [create, list, remove] or Q to exit"
     read MODE
     clear
 
+    if [[ $MODE =~ ^Q|q$ ]]
+    then
+        echo "BYE BYE"
+        sleep 0.5
+        clear
+        exit 0
     # Si quiere crear una copia de seguridad
-    if [ $MODE = "create" ]
+    elif [ $MODE = "create" ]
     then
         echo "Where do you have your files?"
         read SOURCE
@@ -199,13 +207,13 @@ do
             if [ $PERIODICBACKUP = "y" ]
             then
                 echo "If you want to set the backup every minute, hour, day or month write a ."
-                sleep 2.5
+                sleep 5
                 clear
                 Month
                 Day
                 Hour
                 Min
-                bash backupConfig.sh create $SOURCE $DESTI $PERIODICBACKUP "$FORMATTED_MIN" "$FORMATTED_HOUR" "$DAY_NUM" "$FORMATTED_MONTH" "$DAY_WEEK"
+                bash $backupConfigScriptDir create $SOURCE $DESTI $PERIODICBACKUP "$FORMATTED_MIN" "$FORMATTED_HOUR" "$DAY_NUM" "$FORMATTED_MONTH" "$DAY_WEEK"
                 VALID=0
             elif [ $PERIODICBACKUP = "n" ]
             then
@@ -222,7 +230,7 @@ do
                         Hour
                         Min
                         AT_FORMAT="$YEAR$FORMATTED_MONTH$DAY_NUM$FORMATTED_HOUR$FORMATTED_MIN.00"
-                        bash backupConfig.sh create $SOURCE $DESTI $PERIODICBACKUP $AT_FORMAT
+                        bash $backupConfigScriptDir create $SOURCE $DESTI $PERIODICBACKUP $AT_FORMAT
                         VALID=0
                     elif [ $NOW != "y" ]
                     then
@@ -233,6 +241,27 @@ do
                 done
             else
                 echo "WRONG FORMAT!! Try again"
+            fi
+        done
+    elif [ $MODE = "list" ]
+    then
+        echo "List of backups"
+        bash $backupConfigScriptDir list
+    elif [ $MODE = "remove" ]
+    then
+        VALID=0
+        while [ $VALID -eq 0 ]
+        do
+            bash $backupConfigScriptDir list
+            read -p "Select the recurrent backup number you want to remove or Q to exit " REMOVE
+            if [[ ! $REMOVE =~ ^[0-9]+|Q|q$ ]]
+            then
+                echo "WRONG FORMAT!! Try again"
+            elif [[ $REMOVE =~ ^Q|q$ ]]
+            then
+                VALID=1
+            else
+                bash $backupConfigScriptDir remove $REMOVE && VALID=1 && echo "Backup programming removed"
             fi
         done
     else
@@ -258,17 +287,17 @@ do
             VALID=1
         fi
     done
-
-    echo "mode: $MODE
-    source: $SOURCE
-    desti: $DESTI
-    periodicBackup: $PERIODICBACKUP"
-        
-    echo "YEAR: $YEAR 
-    MES: $FORMATTED_MONTH    
-    DIA_SEM: $DAY_WEEK
-    DIA_NUM: $DAY_NUM
-    HORA: $FORMATTED_HOUR 
-    MIN: $FORMATTED_MIN
-    AT_FORMAT: $AT_FORMAT"
+#
+#    echo "mode: $MODE
+#    source: $SOURCE
+#    desti: $DESTI
+#    periodicBackup: $PERIODICBACKUP"
+#
+#    echo "YEAR: $YEAR
+#    MES: $FORMATTED_MONTH
+#    DIA_SEM: $DAY_WEEK
+#    DIA_NUM: $DAY_NUM
+#    HORA: $FORMATTED_HOUR
+#    MIN: $FORMATTED_MIN
+#    AT_FORMAT: $AT_FORMAT"
 done
