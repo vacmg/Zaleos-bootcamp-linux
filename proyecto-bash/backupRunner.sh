@@ -21,8 +21,8 @@ fi
 
 if [ ! -d "$backupDir" ] || [ ! -r "$backupDir" ]
 then
-    echo "Backup directory does not exist or is not readable" > "${backupFile}.log"
-    exit 1
+    echo "Backup directory does not exist or is not readable" | tee "${backupFile}.log" >&2
+    exit 2
 fi
 
 tar cJvf "${backupFile}.tar.xz" "$backupDir" &>> "${backupFile}.log"
