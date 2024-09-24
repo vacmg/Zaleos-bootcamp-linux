@@ -229,13 +229,14 @@ do
                         Day
                         Hour
                         Min
-                        AT_FORMAT="$YEAR$FORMATTED_MONTH$DAY_NUM$FORMATTED_HOUR$FORMATTED_MIN.00"
+                        AT_FORMAT="-t $YEAR$FORMATTED_MONTH$DAY_NUM$FORMATTED_HOUR$FORMATTED_MIN.00"
                         bash $backupConfigScriptDir create $SOURCE $DESTI $PERIODICBACKUP $AT_FORMAT
                         VALID=0
                     elif [ $NOW != "y" ]
                     then
                         echo "WRONG FORMAT!! Try again"
                     else
+                        bash $backupConfigScriptDir create $SOURCE $DESTI $PERIODICBACKUP
                         VALID=0
                     fi
                 done

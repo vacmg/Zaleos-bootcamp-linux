@@ -13,9 +13,9 @@ function create()
     # echo "Create option running with the following arguments: $*"
     if [ $# -lt 3 ]
     then
-        echo "To program a backup to be run according to a specific periodic schedule: ./backupConfig.sh create backupDir backupFile 1 minute hour dayOfMonth month dayOfWeek" >&2
-        echo "To program a backup to be run once in the future: ./backupConfig.sh create backupDir backupFile 0 timeArgs..." >&2
-        echo "To program a backup to be run now: ./backupConfig.sh create backupDir backupFile 0" >&2
+        echo "To program a backup to be run according to a specific periodic schedule: ./backupConfig.sh create backupDir backupFile y minute hour dayOfMonth month dayOfWeek" >&2
+        echo "To program a backup to be run once in the future: ./backupConfig.sh create backupDir backupFile n timeArgs..." >&2
+        echo "To program a backup to be run now: ./backupConfig.sh create backupDir backupFile n" >&2
         exit 1
     fi
 
@@ -50,16 +50,15 @@ function create()
         then
             echo "Backup will be run now" >&2
             at now <<< "$backupCMD"
-
         else
             timeArgs=${*:4} # get all arguments from the 4th argument
             echo "Backup will be run at $timeArgs" >&2
-            at "$timeArgs" <<< "$backupCMD"
+            at $timeArgs <<< "$backupCMD"
         fi
     else
         if [ $# -ne 8 ]
         then
-            echo "To program a backup to be run according to a specific periodic schedule: ./backupConfig.sh backupDir backupFile 1 minute hour dayOfMonth month dayOfWeek" >&2
+            echo "To program a backup to be run according to a specific periodic schedule: ./backupConfig.sh backupDir backupFile y minute hour dayOfMonth month dayOfWeek" >&2
             exit 1
         fi
 
