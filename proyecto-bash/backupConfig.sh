@@ -10,7 +10,7 @@ backupRunnerScriptDir="/home/vm/Documentos/GitHub/Zaleos-bootcamp-linux/proyecto
 
 function create()
 {
-    echo "Create option running with the following arguments: $*"
+    # echo "Create option running with the following arguments: $*"
     if [ $# -lt 3 ]
     then
         echo "To program a backup to be run according to a specific periodic schedule: ./backupConfig.sh create backupDir backupFile 1 minute hour dayOfMonth month dayOfWeek" >&2
@@ -122,20 +122,19 @@ function create()
 
 function list()
 {
-    echo "List option running with the following arguments: $*"
+    # echo "List option running with the following arguments: $*"
     if [ $# -ne 0 ]
     then
         echo "Usage: ./backupConfig.sh list" >&2
         exit 1
     fi
 
-    crontab -l | grep $backupRunnerScriptDir | sed "s|bash $backupRunnerScriptDir||" | cat -n 2> /dev/null
-
+    crontab -l 2> /dev/null | grep $backupRunnerScriptDir | sed "s|bash $backupRunnerScriptDir||" | cat -n
 }
 
 function remove()
 {
-    echo "Remove option running with the following arguments: $*"
+    # echo "Remove option running with the following arguments: $*"
     if [[ $# -ne 1 || ! $1 =~ ^[0-9]+$ ]]
     then
         echo "Usage: ./backupConfig.sh remove line_id" >&2
@@ -150,10 +149,11 @@ function remove()
         crontab -l | grep -v "$pattern" | sort -ru | crontab -
     else
         echo "No entry exists with this number ($1)" >&2
+        exit 1
     fi
 }
 
-echo "The script is running with the following arguments: $*"
+# echo "The script is running with the following arguments: $*"
 
 if [ "$1" = "create" ]
 then
